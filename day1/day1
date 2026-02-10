@@ -1,0 +1,53 @@
+# Week 9 – Day 1  
+## Next Greater Element II (LeetCode 503)
+
+### 🔹 Problem Statement
+Given a circular integer array `nums`, return the **next greater number** for every element in `nums`.
+
+The next greater number of a number `x` is the first greater number to its traversing-order next in the array, which means you should search **circularly** to find its next greater number.  
+If it doesn't exist, return `-1` for that number.
+
+---
+
+### 🔹 Approach
+- Use a **monotonic decreasing stack**.
+- Traverse the array **twice (2 * n)** to simulate circular behavior.
+- Store indices in the stack.
+- When a greater element is found, update the result.
+
+---
+
+### 🔹 Time Complexity
+- **O(n)**
+
+### 🔹 Space Complexity
+- **O(n)** (stack + result array)
+
+---
+
+### 🔹 Example
+**Input:**  
+`nums = [1,2,1]`
+
+**Output:**  
+`[2,-1,2]`
+
+---
+
+```cpp
+  class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        int n= nums.size();
+        vector<int> ans(n,-1);
+        stack<int> s;
+        for(int i=2*n-1;i>=0;i--){
+            while(s.size()>0 && nums[s.top()]<=nums[i%n]) {
+                s.pop();
+            }
+            ans[i%n] = s.empty() ? -1 : nums[s.top()];
+            s.push(i%n);
+        }
+        return ans;
+    }
+};
