@@ -1,0 +1,57 @@
+# Week 9 - Day 2  
+## 🧠 LeetCode 42 - Trapping Rain Water
+
+## 📌 Problem Statement
+
+Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+
+---
+
+# 💡 Approach 1: Prefix & Suffix Maximum (Dynamic Programming)
+
+## 🔍 Core Idea
+
+At any index `i`, water trapped is:
+
+water[i] = min(leftMax[i], rightMax[i]) - height[i]
+
+Because:
+- Water is limited by the shorter boundary.
+- We need maximum height on left and right side.
+
+---
+
+## 🧠 Step-by-Step Explanation
+
+### 1️⃣ Create Two Arrays
+
+- `lmax[i]` → Maximum height from index 0 to i
+- `rmax[i]` → Maximum height from index n-1 to i
+
+---
+```cpp
+  class Solution {
+public:
+    int trap(vector<int>& height) {
+        int n = height.size();
+        vector<int> lmax(n,0);
+        vector<int> rmax(n,0);
+        lmax[0] = height[0];
+        rmax[n-1] = height[n-1];
+        int ans=0;
+        // left maximum
+        for(int i=1;i<n;i++){
+            lmax[i] = max(lmax[i-1],height[i]);
+        }
+        //right maximum
+        for(int i=n-2;i>=0;i--){
+            rmax[i] = max(rmax[i+1],height[i]);
+        }
+        //answer
+        for(int i=0;i<n;i++){
+            ans+=min(lmax[i],rmax[i]) - height[i];
+        }
+        return ans;
+    }
+};
+
