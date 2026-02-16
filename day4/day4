@@ -1,0 +1,184 @@
+# Day 4 – LRU Cache (LeetCode 146)
+
+## 📌 Problem Link
+https://leetcode.com/problems/lru-cache/
+
+## 🧠 Problem Statement
+
+Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
+
+Implement the LRUCache class:
+
+• LRUCache(int capacity)
+    Initialize the cache with positive size capacity.
+
+• int get(int key)
+    Return the value of the key if exists, otherwise return -1.
+
+• void put(int key, int value)
+    Update the value of the key if exists, otherwise add the key-value pair.
+    If capacity exceeds, remove the least recently used key.
+
+All operations must run in O(1) time complexity.
+
+---
+
+## 🧩 Approach
+
+To achieve O(1) time complexity, we use:
+
+• HashMap → Fast lookup O(1)
+• Doubly Linked List → Fast insert/delete O(1)
+
+### Why Doubly Linked List?
+
+It allows:
+
+• Insert at front → Most recently used  
+• Remove from back → Least recently used  
+
+---
+
+## ⚙️ Algorithm
+
+### get(key)
+
+1. Check if key exists in hashmap
+2. If not → return -1
+3. Move node to front (most recently used)
+4. Return value
+
+---
+
+### put(key, value)
+
+1. If key exists:
+   • Remove old node
+
+2. If capacity full:
+   • Remove least recently used node (tail->prev)
+
+3. Insert new node at front
+
+4. Update hashmap
+
+---
+
+## 🕒 Time Complexity
+
+| Operation | Complexity |
+|---------|-------------|
+| get     | O(1) |
+| put     | O(1) |
+
+---
+
+## 🧠 Space Complexity
+
+O(capacity)
+
+---
+
+## 🏆 Key Concepts Learned
+
+• Doubly Linked List  
+• HashMap  
+• Design Data Structure  
+• LRU Eviction Policy  
+• O(1) optimization  
+
+---
+
+## 💻 Code
+See `lru_cache.cpp`
+
+---
+
+## 🚀 Author
+
+Jitu – Weekly DSA Series
+
+  ```cpp
+  class LRUCache {
+public:
+    class Node{
+        public:
+        int key,val;
+        Node* next;
+        Node* prev;
+
+        Node(int k,int v){
+            key=k;
+            val=v;
+            prev = next = NULL;
+        }
+    };
+
+    Node* head =  new Node(-1,-1);
+    Node* tail = new Node(-1,-1);
+
+    unordered_map<int,Node*> m;
+    int limit;
+
+    void addNode(Node* newNode){
+        Node* oldnext = head->next;
+
+        head->next = newNode;
+        oldnext->prev=newNode;
+
+        newNode->next=oldnext;
+        newNode->prev=head;
+    }
+
+    void deleteNode(Node* oldnode){
+        Node* oldprev = oldnode->prev;
+        Node* oldnext = oldnode->next;
+
+        oldprev->next = oldnext;
+        oldnext->prev = oldprev;
+    }
+    LRUCache(int capacity) {
+        limit = capacity;
+        head->next=tail;
+        tail->prev=head;
+    }
+    
+    int get(int key) {
+       if(m.find(key)==m.end()){
+            return -1;
+        }
+
+        Node* ansNode = m[key];
+        int ans = ansNode->val;
+
+        m.erase(key);
+        deleteNode(ansNode);
+
+        addNode(ansNode);
+        m[key] = ansNode;
+        return ans;  
+    }
+    
+    void put(int key, int value) {
+        if(m.find(key)!=m.end()){
+            Node* oldNode = m[key];
+            deleteNode(oldNode);
+            m.erase(key);
+        }
+       
+        if(m.size()==limit){
+            m.erase(tail->prev->key);
+            deleteNode(tail->prev);
+        }
+        Node* newNode = new Node(key,value);
+        addNode(newNode);
+        m[key] = newNode;
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
