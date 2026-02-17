@@ -1,0 +1,162 @@
+# Week 9 Day 5 – Queue and Deque
+
+## 📌 Topics Covered
+- Queue Basics
+- Queue using STL
+- Deque Basics
+- Deque using STL
+- Operations and Applications
+
+---
+
+## 🚀 Queue
+
+### Definition
+Queue is a linear data structure that follows the **FIFO (First In First Out)** principle.
+
+Queue using linked list //scratch implimentation
+  #include <bits/stdc++.h>
+using namespace std;
+
+// queue using linkedlist
+class Node
+{
+public:
+    int data;
+    Node *next;
+
+    Node(int val)
+    {
+        data = val;
+        next = NULL;
+    }
+};
+
+class Queue
+{
+    Node *head;
+    Node *tail;
+
+public:
+    Queue()
+    {
+        head = tail = NULL;
+    }
+
+    void push(int val)
+    { // push at tail
+        Node *newNode = new Node(val);
+
+        if (isempty())
+        {
+            head = tail = newNode;
+        }
+        else
+        {
+            tail->next = newNode;
+            tail = newNode;
+        }
+    }
+
+    void pop()
+    {
+        if (isempty())
+        {
+            cout << "LL is empty";
+        }
+        else
+        {
+            Node *temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+    int front()
+    {
+        if (isempty())
+        {
+            cout << "LL is empty";
+        }
+        return head->data;
+    }
+
+    bool isempty()
+    {
+        return head == NULL;
+    }
+};
+
+int main()
+{
+   Queue q;
+    q.push(3);
+    q.push(2);
+    q.push(1);
+
+    while (!q.isempty())
+    {
+        cout<<q.front()<<" ";
+        q.pop();
+    }
+
+    
+    return 0;
+}
+  ```C++ STL
+    #include <iostream>
+#include <queue>
+#include <deque>
+using namespace std;
+
+int main() {
+
+    // ================= QUEUE =================
+    cout << "QUEUE Example\n";
+
+    queue<int> q;
+
+    // push elements
+    q.push(10);
+    q.push(20);
+    q.push(30);
+
+    cout << "Front element: " << q.front() << endl;
+    cout << "Back element: " << q.back() << endl;
+
+    // pop element
+    q.pop();
+
+    cout << "Front after pop: " << q.front() << endl;
+
+    cout << "Queue elements: ";
+    while(!q.empty()) {
+        cout << q.front() << " ";
+        q.pop();
+    }
+    cout << endl;
+
+
+    // ================= DEQUE =================
+    cout << "\nDEQUE Example\n";
+
+    deque<int> dq;
+
+    dq.push_back(10);
+    dq.push_back(20);
+    dq.push_front(5);
+    dq.push_front(2);
+
+    cout << "Front element: " << dq.front() << endl;
+    cout << "Back element: " << dq.back() << endl;
+
+    dq.pop_front();
+    dq.pop_back();
+
+    cout << "Deque elements: ";
+    for(int x : dq) {
+        cout << x << " ";
+    }
+
+    return 0;
+}
