@@ -1,0 +1,121 @@
+# Week 9 - Day 6: Circular Queue
+
+## 📌 What is a Circular Queue?
+
+A Circular Queue is a linear data structure that follows the FIFO (First In First Out) principle, but the last position is connected back to the first position to make a circle.
+
+It overcomes the limitation of a normal queue where unused spaces cannot be reused.
+
+In Circular Queue:
+- The last element connects to the first element.
+- Front and Rear move circularly.
+
+---
+
+## 📊 Visualization
+
+Example (Size = 5)
+
+Initial:
+[ _ _ _ _ _ ]
+
+Insert 10, 20, 30:
+[ 10 20 30 _ _ ]
+
+Delete twice:
+[ _ _ 30 _ _ ]
+
+Insert 40, 50:
+[ 50 _ 30 40 50 ] ← Circular movement
+
+---
+
+## 🧠 Operations
+
+| Operation | Description |
+|---------|-------------|
+| Enqueue | Insert element |
+| Dequeue | Remove element |
+| Front | Get front element |
+| isEmpty | Check if empty |
+| isFull | Check if full |
+
+---
+
+## ⚙️ Conditions
+
+### Queue Full
+  #include <bits/stdc++.h>
+using namespace std;
+
+class circularQueue
+{
+    int *arr;
+    int currSize, cap;
+    int f, r;
+
+public:
+    circularQueue(int size)
+    {
+        cap = size;
+        arr = new int[cap];
+        currSize = 0;
+        f = 0;
+        r = -1;
+    }
+
+    void push(int val)
+    {
+        if (currSize == cap)
+        {
+            cout << "cq is full";
+        }
+
+        r = (r + 1) % cap;
+        arr[r] = val;
+        currSize++;
+    }
+
+    void pop()
+    {
+        if (empty())
+        {
+            cout << "cq is full";
+        }
+
+        f = (f + 1) % cap;
+        currSize--;
+    }
+
+    int front()
+    {
+        if (currSize == 0)
+        {
+            cout << "cq is full";
+        };
+
+        return arr[f];
+    }
+
+    bool empty()
+    {
+        return currSize == 0;
+    }
+
+    void print(){
+        for(int i=0;i<cap;i++){
+            cout<<arr[i]<<" ";
+        }
+    }
+};
+int main()
+{
+    circularQueue cq(3);
+    cq.push(1);
+    cq.push(2);
+    cq.push(4);
+    cq.push(6);
+    cq.print();
+    return 0;
+}
+
